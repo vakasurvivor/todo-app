@@ -1,0 +1,24 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "A simple CRUD Todo application built with Vite, React, and Express.",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "api"
+  ],
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start:dev": "docker compose -f compose.dev.yaml watch",
+    "start": "docker compose watch",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:ps": "docker compose ps",
+    "install:all": "npm install"
+  },
+  "devDependencies": {
+    "vite": "^7.0.4"
+  }
+}

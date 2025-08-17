@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TODO App</title>
+    <meta name="description" content="Version:001" />
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <header>
+      <hgroup>
+        <h1>TODO APP</h1>
+      </hgroup>
+
+      <button
+        id="openTechStack"
+        aria-haspopup="dialog"
+        aria-controls="techStackDialog"
+        aria-expanded="false"
+      >
+        <img
+          src="img/circle-question-mark.svg"
+          alt="Add icon"
+          width="24"
+          height="24"
+        />
+        <span> Tech Stack </span>
+      </button>
+    </header>
+
+    <main>
+      <div>
+        <img src="img/js.svg" alt="Add icon" width="24" height="24" /> [Araay]
+      </div>
+      <form class="task-input-area">
+        <input
+          type="text"
+          id="task-input"
+          placeholder="新しく追加する"
+          maxlength="50"
+          aria-label="新しい TODO List を追加する"
+        />
+        <button class="task-add-button" type="submit">
+          <img src="img/plus.svg" alt="Add icon" width="24" height="24" />
+        </button>
+      </form>
+
+      <ul class="task-list" aria-busy="true"></ul>
+    </main>
+
+    <footer>
+      <small>vakasurvivor</small>
+      <a target="_blank" rel="noopener noreferrer" href="https://github.co.jp/"
+        >Github</a
+      >
+    </footer>
+
+    <dialog
+      id="techStackDialog"
+      aria-labelledby="techstack-label"
+      class="tech-stack-dialog"
+    >
+      <section
+        class="tech-stack"
+        aria-labelledby="techstack-label"
+        style="display: flex; flex-direction: column; row-gap: 1rem"
+      >
+        <h2 id="techstack-label">Tech Stack</h2>
+
+        <section aria-labelledby="frontend-label">
+          <h3 id="frontend-label">Frontend</h3>
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="database-label">
+          <h3 id="database-label">DataBase</h3>
+          <ul>
+            <li>IndexedDB (Web API)</li>
+          </ul>
+        </section>
+
+        <div style="width: 100%; text-align: right">
+          <button id="closeTechStack" type="button" aria-label="閉じる">
+            閉じる
+          </button>
+        </div>
+      </section>
+    </dialog>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

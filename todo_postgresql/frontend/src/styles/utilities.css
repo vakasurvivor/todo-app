@@ -1,0 +1,95 @@
+/* shadow */
+.shadow-sm {
+  box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+}
+.shadow-md {
+  box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px;
+}
+.shadow-lg {
+  box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px;
+}
+
+/* animation */
+.fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    translate: 0% 6px;
+  }
+  100% {
+    opacity: 1;
+    translate: 0% 0%;
+  }
+}
+
+.fade-out {
+  animation: fade-out 0.3s ease-in forwards;
+}
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+    translate: 0% 0%;
+  }
+  100% {
+    opacity: 0;
+    translate: 10% 0%;
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.3s ease-out forwards;
+}
+@keyframes fade-up {
+  0% {
+    translate: 0% 100%;
+  }
+  100% {
+    translate: 0% 0%;
+  }
+}
+
+.dialog-fade-in {
+  animation: dialog-fade-in 0.3s ease-in forwards;
+}
+@keyframes dialog-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.dialog-fade-up {
+  animation: dialog-fade-up 0.3s ease-out forwards;
+}
+@keyframes dialog-fade-up {
+  0% {
+    opacity: 0;
+    translate: -50% -40%;
+  }
+  100% {
+    opacity: 1;
+    translate: -50% -50%;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

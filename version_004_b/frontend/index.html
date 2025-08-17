@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+JP:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>Todo List</h1>
+        <button
+          class="open-dialog shadow-sm"
+          aria-haspopup="dialog"
+          aria-controls="tech-stack-dialog"
+          aria-expanded="false"
+        >
+          <img
+            src="img/circle-question-mark.svg"
+            alt="Add icon"
+            width="24"
+            height="24"
+          />
+          <span>技術選定</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="app">
+      <form class="task-input-area">
+        <input
+          type="text"
+          id="task-input"
+          class="shadow-sm"
+          placeholder="新しく追加する"
+          maxlength="50"
+          aria-label="新しい TODO List を追加する"
+        />
+        <button class="task-add-button" type="submit">
+          <img src="img/plus.svg" alt="Add icon" width="24" height="24" />
+        </button>
+      </form>
+
+      <ul class="task-list" aria-busy="true"></ul>
+    </main>
+
+    <footer>
+      <a target="_blank" rel="noopener noreferrer" href="https://github.co.jp/">
+        <img src="img/github.svg" alt="Github icon" width="15" height="15" />
+        GitHub
+      </a>
+      <small>@vakasurvivor</small>
+    </footer>
+
+    <!-- dialog -->
+    <dialog
+      id="tech-stack-dialog"
+      aria-labelledby="tech-stack-label"
+      class="tech-stack-dialog dialog-fade-up"
+    >
+      <section aria-labelledby="tech-stack-label">
+        <div>
+          <img src="img/layers.svg" alt="Add icon" width="24" height="24" />
+          <h2 id="tech-stack-label">技術選定</h2>
+        </div>
+
+        <section aria-labelledby="frontend-label">
+          <h3 id="frontend-label">Frontend</h3>
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+          </ul>
+        </section>
+        <section aria-labelledby="backend-label">
+          <h3 id="backend-label">Backend</h3>
+          <ul>
+            <li>
+              Node.js（🌐HTTP /🤝API /🗄️DB）
+              <ul>
+                <li>Express 🌐/🤝</li>
+                <li>SQLite🗄️</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <div>
+          <button
+            class="close-dialog shadow-sm"
+            type="button"
+            aria-label="閉じる"
+          >
+            閉じる
+          </button>
+        </div>
+      </section>
+    </dialog>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

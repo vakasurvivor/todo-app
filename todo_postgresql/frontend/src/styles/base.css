@@ -1,0 +1,28 @@
+body {
+  width: 100%;
+  min-height: 100dvh;
+  font-family: "Inter", "Noto Sans JP";
+  color: var(--color-gray-950);
+}
+
+h1 {
+  font-size: clamp(1.25rem, 0.909rem + 1.7vw, 2rem);
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+main {
+  display: grid;
+  place-items: center;
+  padding-inline: 1rem;
+  margin-block-start: 3rem;
+}

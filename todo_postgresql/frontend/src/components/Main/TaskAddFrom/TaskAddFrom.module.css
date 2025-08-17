@@ -1,0 +1,39 @@
+@layer components {
+  .task-input-area {
+    position: relative;
+    width: min(500px, 100%);
+    margin-bottom: 2rem;
+
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      background-color: var(--color-white);
+      border-radius: 0.25rem;
+      border: 1px solid color-mix(in oklab, var(--color-black) 10%, transparent);
+      outline: 2px solid color-mix(in oklab, var(--color-black) 0%, transparent);
+      transition: 0.15s ease border, 0.15s ease outline;
+
+      &:focus {
+        outline: 2px solid
+          color-mix(in oklab, var(--color-black) 20%, transparent);
+        border: 1px solid
+          color-mix(in oklab, var(--color-black) 0%, transparent);
+      }
+    }
+
+    button {
+      width: 24px;
+      height: 24px;
+      padding: 4px;
+      border-radius: 4px;
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      background-color: var(--color-blue-100);
+      &:hover {
+        background-color: var(--color-blue-200);
+      }
+    }
+  }
+}

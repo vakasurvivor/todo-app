@@ -1,0 +1,25 @@
+.task-control-btns {
+  display: flex;
+  column-gap: 0.5rem;
+
+  button {
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+    border-radius: 4px;
+  }
+}
+
+.task-delete-button {
+  background-color: var(--color-gray-300);
+  &:hover {
+    background-color: var(--color-red-300);
+  }
+}
+
+.task-edit-button {
+  background-color: var(--color-green-200);
+  &:hover {
+    background-color: var(--color-green-300);
+  }
+}

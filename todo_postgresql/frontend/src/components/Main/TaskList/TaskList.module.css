@@ -1,0 +1,6 @@
+@layer components {
+  .task-list {
+    width: min(500px, 100%);
+    margin-block-end: 2rem;
+  }
+}

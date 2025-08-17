@@ -1,0 +1,10 @@
+{
+  "name": "Todo App : Vite & nginx & Express & PostgreSQL",
+  "dockerComposeFile": "compose.yaml",
+  "service": "app",
+  "workspaceFolder": "/workspaces",
+  "features": {
+    "ghcr.io/codesandbox/devcontainer-features/codesandbox:0.1.4": {}
+  },
+  "forwardPorts": [5173, "proxy:8080"]
+}
