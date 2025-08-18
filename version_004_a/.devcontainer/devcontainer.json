@@ -6,5 +6,5 @@
   "features": {
     "ghcr.io/codesandbox/devcontainer-features/codesandbox:0.1.4": {}
   },
-  "forwardPorts": [5173, "proxy:8080"]
+  "forwardPorts": ["proxy:8080"]
 }
