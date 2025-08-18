@@ -7,7 +7,7 @@ Next.js は非常に抽象化されているため、公式ドキュメントを
 ---
 # All version
 
-[!WARNING]
+>[!WARNING]
 version:1〜7は、それぞれ確認用にCodesanboxのURLを添付しています。devcontainerを活用したローカル開発環境での動作確認はできておりますが、VM Sandbox上での挙動が不安定な場合がございます。ご了承ください。
 
 ## version:1 - Only JavaScript(Array)
