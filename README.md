@@ -1,8 +1,8 @@
-# はじめに
+b# はじめに
 
 Next.js は非常に抽象化されているため、公式ドキュメントをそのまま読み進めても、理解に苦しむことが多々ありました。特に、非同期処理を伴う通信処理は、その挙動を把握するために、バックエンドの基礎的な理解が必要だと感じました。
 
-そこで、シンプルな「Todo App」を段階的に構築し、バックエンドを含めた開発の全体像を学習しました。version:1〜7 は「技術理解の過程」としての学習記録であり、version:8 は成果物として Vercel を利用して本番環境にデプロイしています。
+そこで、シンプルな「Todo App」を段階的に構築し、バックエンドを含めた開発の全体像を学習しました。version:1〜7 は「技術理解の過程」としての学習記録であり、version:8 は成果物として本番環境にデプロイしています。
 
 ---
 # All version
@@ -41,11 +41,13 @@ version:2 の課題を踏まえ、ブラウザの外部に記憶領域を置く�
 - Frontend (Express Static + Vite): HTML, CSS, JavaScript
 - Backend: Node.js, Express, Prisma, SQLite
 
-### version:4 - Node.js(Express+Prisma)+Vite+SQLite
+---
+
+## version:4 - Node.js(Express+Prisma)+Vite+SQLite
 
 version:3 によって機能要件は満たされている。ここからは、段階的に改良を重ねて、現代的なフロントエンドを主軸としたフルスタック構成に近づけていく。まずは、フロントエンドの分散化されたモジュールを、Viteでバンドルし、パフォーマンスの改善を図る。バックエンドでは、Prisma(ORM)を導入して、Database層の抽象化を図る。
 
-#### 技術選定
+### 技術選定
 - Frontend (Express Static)
   - Vite(dist)
     - HTML
@@ -57,7 +59,9 @@ version:3 によって機能要件は満たされている。ここからは、�
     - Prisma
     - SQLite
 
-### version:5 - NGNIX(Vite:React)+Node.js(Express+Prisma)+PostgreSQL
+---
+
+## version:5 - NGNIX(Vite:React)+Node.js(Express+Prisma)+PostgreSQL
 
 version:3β の構成では、Node.jsに責務が集中している。「Todo App」は小規模なため、問題は表面化しないが、プログラミングの定石としては「単一責任」の法則がある。肥大化した責務を分割し、三層構造を構築する。
 
@@ -67,7 +71,7 @@ version:3β の構成では、Node.jsに責務が集中している。「Todo Ap
 
 Web Server には、Viteで生成した静的ファイルの配信とAPI Server への振り分けを委任する。Database Serverの独立に伴い、ファイルベースのSQLiteからより汎用的なPostgreSQLへ移行する。分散化されたバックエンドの開発環境としてDockerを導入する。更なる改良として、フロントエンドは、より宣言的にUI構築をするためにReactを利用する。すでに導入済みのVite を基盤として React + CSS Modules で全体的に書き換える。SPA (Single Page Application)への転換を図り、モダンなフロントエンドエコシステムとの接点を持たせる。
 
-#### 技術選定
+### 技術選定
 - Frontend
   - NGINX (Docker)
     - Vite × React SPA(dist)
@@ -80,12 +84,13 @@ Web Server には、Viteで生成した静的ファイルの配信とAPI Server 
     - Prisma
   - PostgreSQL (Docker)
 
+---
 
-### version:6 - Next.js(API Routes+Prisma)+PostgreSQL
+## version:6 - Next.js(API Routes+Prisma)+PostgreSQL
 
 version:5では、Reactを導入して、現代的なフロントエンド構成に
 
-#### 技術選定
+### 技術選定
 - Frontend
   - Vercel CDN (Static from Next.js)
     - Next.js App Router
@@ -97,27 +102,24 @@ version:5では、Reactを導入して、現代的なフロントエンド構成
     - API routes (REST API)
   - PostgreSQL (Docker)
 
+---
 
-### version:7 - Next.js(Server Function+Prisma)+PostgreSQL
+## version:7 - Next.js(Server Function+Prisma)+PostgreSQL
 
 version:6では、Expressで構築した REST API を、Next.js が提供する API Routes に移行した。
 
 RPC（Remote Procedure Call）のように API Routes層を挟まずに、直接サーバー関数を
 
-#### 技術選定
-- Frontend
-  - Vercel CDN (Static from Next.js)
-    - Next.js App Router
-      - TSX
-      - TailwindCSS
-      - TypeScript
-- Backend
-  - Vercel Function (AWS Lambda)
-    - Server Function (RPC)
-  - PostgreSQL (Docker)
+### 技術選定
 
+|          | 使用技術               |
+| -------- | --------------------- |
+| Frontend | Vercel CDN (Static from Next.js)</br>Next.js App Router<ul><li>TSX</li><li>TailwindCSS</li><li>TypeScript</li></ul> |
+| Backend  | Vercel Function (AWS Lambda)<ul><li>Server Function (RPC)</li><li>Prisma</li></ul> PostgreSQL (Docker) |
 
-### version:8 - Next.js+Supabase Client
+---
+
+## version:8 - Next.js+Supabase(PostgreSQL)
 
 最終版として、本番環境へ簡易的に移行するために、PostgreSQLを基盤としたSupabase(Bass)を利用する。
 Pass(Vercel) + Bass(Supabase) の組み合わせによって、サーバーの技術的な詳細に立ち入らず、フロントエンドエンジニアでも本番環境へ介入できる。
@@ -125,12 +127,9 @@ Pass(Vercel) + Bass(Supabase) の組み合わせによって、サーバーの�
 
 開発環境においてDockerを必ずしも必要としないため、「Todo App」を構築する上で、おそらく最も簡単な方法のひとつである。イメージとしては、SupabaseをMicroCMSに変更すると、現代的なフロントエンド技術を活用したコーポレートサイトが開発できる。
 
-#### 技術選定
-- Frontend
-  - Vercel CDN (Static from Next.js)
-    - Next.js App Router
-      - TSX
-      - TailwindCSS
-      - TypeScript
-- Backend
-  - Supabase (PostgreSQL)
+### 技術選定
+
+|          | 使用技術               |
+| -------- | --------------------- |
+| Frontend | Vercel CDN (Static from Next.js)</br>Next.js App Router<ul><li>TSX</li><li>TailwindCSS</li><li>TypeScript</li></ul> |
+| Backend  | Supabase (PostgreSQL) |
