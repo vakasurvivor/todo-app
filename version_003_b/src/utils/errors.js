@@ -1,8 +1,8 @@
-// ./src/utils/error.js
+// ./src/utils/errors.js
 
 class AppError extends Error {
-  constructor(message, status = 500) {
-    super(message);
+  constructor(message, status = 500, options = {}) {
+    super(message, options);
     this.name = this.constructor.name;
     this.status = status;
     Error.captureStackTrace(this, this.constructor);
@@ -10,20 +10,20 @@ class AppError extends Error {
 }
 
 class DatabaseError extends AppError {
-  constructor(message, status = 500) {
-    super(message, status);
+  constructor(message = "Database Error", { status = 500, cause = null } = {}) {
+    super(message, status, cause ? { cause } : undefined);
   }
 }
 
 class NotFoundError extends AppError {
-  constructor(message = "Not Found") {
-    super(message, 404);
+  constructor(message = "Not Found", { status = 404, cause = null } = {}) {
+    super(message, status, cause ? { cause } : undefined);
   }
 }
 
 class BadRequestError extends AppError {
-  constructor(message = "Bad Request") {
-    super(message, 400);
+  constructor(message = "Bad Request", { status = 400, cause = null } = {}) {
+    super(message, status, cause ? { cause } : undefined);
   }
 }
 

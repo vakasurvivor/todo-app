@@ -3,25 +3,24 @@
 import { AppError } from "../utils/errors.js";
 
 /**
- * @param {Error} err
+ * @param {import("express").ErrorRequestHandler} err
  * @param {import("express").Request} req
  * @param {import("express").Response} res
- * @param {import("express").ErrorRequestHandler} err
- * @return {import("express").NextFunction} next
  */
 export default function errorHandler(err, req, res, next) {
+  console.error(err);
+
   if (err instanceof AppError) {
-    res.status(err.status).json({
-      status: "error",
+    return res.status(err.status).json({
+      name: err.name,
       message: err.message,
     });
-    return;
   }
 
-  // 予期しない例外は [500] で返却する
-  console.error("[Unhandled Error]", err);
   res.status(500).json({
-    status: "error",
-    message: "Internal Server Error",
+    error: {
+      name: "Internal Server Error",
+      message: "サーバーで予期しない例外が発生しました。",
+    },
   });
 }

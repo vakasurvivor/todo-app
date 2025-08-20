@@ -9,7 +9,7 @@ import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
 
-// middleware
+// Global Middleware
 app.use(express.json());
 app.use(cors());
 
@@ -18,10 +18,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-// backend (restFull API)
+// backend (REST API)
 app.use("/api", tasksRouter);
 
-// middleware (error handling)
+// Global Error Handling
 app.use(errorHandler);
 
 export default app;

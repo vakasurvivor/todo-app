@@ -1,4 +1,5 @@
-// ./src/utlis/prisma.js
+// ./src/utils/prisma.js
+
 import path from "path";
 import { PrismaBetterSQLite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaClient } from "../generated/prisma/index.js";

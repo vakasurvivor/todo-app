@@ -2,23 +2,33 @@
 
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
-import { AppError, DatabaseError, NotFoundError } from "../utils/errors.js";
+import { DatabaseError } from "../utils/errors.js";
 import snakeToCamel from "../utils/snakeToCamel.js";
+
+/**
+ * @typedef {Object} Task
+ * @property {number} id
+ * @property {string} text
+ * @property {string} createdAt
+ * @property {string | null} updatedAt
+ * @property {boolean} isCompleted
+ */
 
 let db;
 
 /**
+ * SQLite 初期化
  * @returns {Promise<void>}
- * @throws {Error}
+ * @throws {DatabaseError}
  */
 async function initDB() {
   if (db) {
     return;
   }
 
-  let tableNameForLog = `[${process.env.DB_TYPE || "SQLite"} 📑:${
+  let tableNameForLog = `${process.env.DB_TYPE || "SQLite"} (${
     process.env.DB_TABLE_NAME || "tasks"
-  }]`;
+  }.db)`;
 
   try {
     db = await open({
@@ -43,28 +53,29 @@ async function initDB() {
     `);
 
     if (!tableExists) {
-      console.log(`🎉 ${tableNameForLog} が初期化されました \n`);
+      console.log(`🚀 ${tableNameForLog} が初期化されました。\n`);
     } else {
-      console.log(`🎉 ${tableNameForLog} に接続されました \n`);
+      console.log(`🤝 ${tableNameForLog} に接続されました。\n`);
     }
 
     return db;
   } catch (err) {
     if (!db) {
-      console.error(`🔥 ${tableNameForLog} の接続に失敗しました \n`, err);
-      throw new DatabaseError(`🔥 ${tableNameForLog} の接続に失敗しました`);
+      throw new DatabaseError(`${tableNameForLog} の接続に失敗しました。`, {
+        cause: err,
+      });
     }
-
-    console.error(`🔥 ${tableNameForLog} の初期化に失敗しました \n`, err);
-    throw new AppError(`🔥 ${tableNameForLog} の初期化に失敗しました`);
+    throw new DatabaseError(`${tableNameForLog} の初期化に失敗しました。`, {
+      cause: err,
+    });
   }
 }
 
 /**
- * 新規作成 : [POST method]
+ * 新規作成:[POST method]
  * @param {string} text
  * @returns {Promise<{id: number}>}
- * @throws {Error}
+ * @throws {DatabaseError}
  */
 async function addTask(text) {
   const task = {
@@ -84,55 +95,51 @@ async function addTask(text) {
       task.isCompleted
     );
 
-    if (result.changes === 0) {
-      throw new AppError("新規作成に失敗しました。");
-    }
-
     return { id: result.lastID };
   } catch (err) {
-    console.error("新規作成中に例外が発生しました。:", err);
-    throw err;
+    if (err.code && err.code.startsWith("SQLITE")) {
+      throw new DatabaseError("タスクの新規作成に失敗しました。", {
+        cause: err,
+      });
+    }
+    throw new DatabaseError("データベース操作中に例外が発生しました。", {
+      cause: err,
+    });
   }
 }
 
 /**
- * @typedef {Object} Task
- * @property {number} id
- * @property {string} text
- * @property {string} createdAt
- * @property {string | null} updatedAt
- * @property {boolean} isCompleted
- */
-
-/**
- * GET method : [取得]
+ * 一件取得:[GET method]
  * @param {number} id
  * @returns {Promise<Task>}
- * @throws {Error}
+ * @throws {DatabaseError}
  */
 async function getTask(id) {
   try {
     const task = await db.get(`SELECT * FROM tasks WHERE id = ?`, id);
-    if (!task) throw new NotFoundError(`ID:${id} が見つかりません。`);
+    if (!task) return null;
 
     const camelTask = snakeToCamel(task);
     return {
       ...camelTask,
-      isCompleted: Boolean(task.is_completed), // Boolean に変換
+      isCompleted: Boolean(camelTask.isCompleted), // Boolean に変換
     };
   } catch (err) {
-    if (err instanceof AppError) {
-      throw err;
+    if (err.code && err.code.startsWith("SQLITE")) {
+      throw new DatabaseError("タスクの取得に失敗しました。", {
+        cause: err,
+      });
     }
-    console.error(`ID:${id} の取得中に例外が発生しました。:`, err);
-    throw new AppError(`ID:${id} の取得に失敗しました。`);
+    throw new DatabaseError("データベース操作中に例外が発生しました。", {
+      cause: err,
+    });
   }
 }
 
 /**
- * GET method : [全件取得]
+ * 全件取得:[GET method]
  * @returns {Promise<Array<Task>>}
- * @throws {Error}
+ * @throws {DatabaseError}
  */
 async function getAllTasks() {
   try {
@@ -142,12 +149,18 @@ async function getAllTasks() {
       const camelTask = snakeToCamel(task);
       return {
         ...camelTask,
-        isCompleted: Boolean(task.is_completed), // Boolean に変換
+        isCompleted: Boolean(camelTask.isCompleted), // Boolean に変換
       };
     });
   } catch (err) {
-    console.error("全件取得中に例外が発生しました。:", err);
-    throw new AppError("全件取得中に失敗しました。");
+    if (err.code && err.code.startsWith("SQLITE")) {
+      throw new DatabaseError("タスクの全件取得に失敗しました。", {
+        cause: err,
+      });
+    }
+    throw new DatabaseError("データベース操作中に例外が発生しました。", {
+      cause: err,
+    });
   }
 }
 
@@ -156,19 +169,15 @@ async function getAllTasks() {
  * @param {number} id
  * @param {object} updates
  * @returns {Promise<boolean>}
- * @throws {Error}
+ * @throws {DatabaseError}
  */
-async function updateTask(id, updates = {}) {
+async function updateTask(id, updates) {
   try {
     const task = await getTask(id);
 
-    const filteredUpdates = Object.fromEntries(
-      Object.entries(updates).filter(([_, value]) => value !== undefined)
-    );
-
     const updatedTask = {
       ...task,
-      ...filteredUpdates,
+      ...updates,
       updatedAt: new Date().toISOString(),
     };
 
@@ -183,8 +192,14 @@ async function updateTask(id, updates = {}) {
 
     return result.changes > 0;
   } catch (err) {
-    console.error(`ID:${id} の更新に失敗しました。:`, err);
-    throw new Error(`ID:${id} の更新に失敗しました。`);
+    if (err.code && err.code.startsWith("SQLITE")) {
+      throw new DatabaseError("タスクの更新に失敗しました。", {
+        cause: err,
+      });
+    }
+    throw new DatabaseError("データベースの操作中に例外が発生しました。", {
+      cause: err,
+    });
   }
 }
 
@@ -192,15 +207,21 @@ async function updateTask(id, updates = {}) {
  * DELETE method : [削除]
  * @param {number} id
  * @returns {Promise<boolean>}
- * @throws {Error}
+ * @throws {DatabaseError}
  */
 async function deleteTask(id) {
   try {
     const result = await db.run(`DELETE FROM tasks WHERE id = ?`, id);
     return result.changes > 0;
   } catch (err) {
-    console.error(`ID:${id} の削除中に例外が発生しました。:`, err);
-    throw new AppError(`ID:${id} の削除に失敗しました。`);
+    if (err.code && err.code.startsWith("SQLITE")) {
+      throw new DatabaseError("タスクの削除に失敗しました。", {
+        cause: err,
+      });
+    }
+    throw new DatabaseError("データベースの操作中に例外が発生しました。", {
+      cause: err,
+    });
   }
 }
 

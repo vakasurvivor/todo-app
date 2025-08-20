@@ -1,23 +1,57 @@
 b# はじめに
 
-Next.js は非常に抽象化されているため、公式ドキュメントをそのまま読み進めても、理解に苦しむことが多々ありました。特に、非同期処理を伴う通信処理は、その挙動を把握するために、バックエンドの基礎的な理解が必要だと感じました。
+Next.js は非常に抽象化されているため、公式ドキュメントをそのまま読み進めても、困惑することが多々ありました。特に、非同期処理を伴う通信処理は、その挙動を把握するために、バックエンドの基礎的な理解が不可欠だと感じました。
 
 そこで、シンプルな「Todo App」を段階的に構築し、バックエンドを含めた開発の全体像を学習しました。version:1〜7 は「技術理解の過程」としての学習記録であり、version:8 は成果物として本番環境にデプロイしています。
 
+
+![HTML](https://img.shields.io/badge/HTML-61DAFB?logo=html5&logoColor=black)
+![CSS](https://img.shields.io/badge/CSS-61DAFB?logo=css&logoColor=black)
+![JavaScript](https://img.shields.io/badge/JavaScript-61DAFB?logo=javascript&logoColor=black)
+
+[![npm version](https://img.shields.io/npm/v/react.svg)](https://www.npmjs.com/package/react)
+
 ---
-# All version
+# all version
 
 >[!WARNING]
-version:1〜7は、それぞれ確認用にCodesanboxのURLを添付しています。devcontainerを活用したローカル開発環境での動作確認はできておりますが、VM Sandbox上での挙動が不安定な場合がございます。ご了承ください。
+version:1〜7は、それぞれ確認用に Codesanbox のURLを添付しています。Dev Container を利用したローカル環境での動作確認はできておりますが、VM Sandbox 上での挙動が不安定な場合がございます。ご了承ください。
 
 ## version:1 - Only JavaScript(Array)
 
 まずは Vanilla JavaScript のみで「Todo App」を作成。一見すると、うまく機能しているように思えるが、ブラウザを再読み込みするとデータが消失してしまう。JavaScriptの配列でデータを保持しているため、永続化することがそもそも不可能である。
 
-### 技術選定
-- Frontend: HTML, CSS, JavaScript (Array)
-- Backend: -
+### Codesanbox
 
+[version:1 確認用URL](https://giscus.app)
+
+### 技術選定
+
+|          |              Tech Stack             |
+| :------: | ----------------------------------- |
+| Frontend | HTML</br>CSS</br>JavaScript (Array) |
+| Backend  | -                                   |
+
+
+<details open>
+<summary>技術選定</summary>
+
+> [!NOTE]
+> Highlights information that users should take into account, even when skimming.
+
+> [!TIP]
+> Optional information to help a user be more successful.
+
+> [!IMPORTANT]
+> Crucial information necessary for users to succeed.
+
+> [!WARNING]
+> Critical content demanding immediate user attention due to potential risks.
+
+> [!CAUTION]
+> Negative potential consequences of an action.
+>
+</details>
 
 ---
 
@@ -26,11 +60,15 @@ version:1〜7は、それぞれ確認用にCodesanboxのURLを添付していま
 version:1 の課題を踏まえ、ブラウザ内にデータを永続化するため IndexedDB を利用しました。
 ただし、別のブラウザや端末ではデータが同期されないため、依然として実用性には制限があります。異なる環境からでも同一のデータソースに接続したい。
 
-### 技術選定
-- Frontend: HTML, CSS, JavaScript ,IndexedDB(WebAPI)
-- Backend: -
-
 ### Previw URL (Codesanbox)
+
+
+### 技術選定
+|          | Tech Stack                          |
+| :------: | ----------------------------------- |
+| Frontend | HTML</br>CSS</br>JavaScript</br>IndexedDB(WebAPI) |
+| Backend  | -                                   |
+
 ---
 
 ## version:3 - Node.js(Express)+SQLite
@@ -91,17 +129,12 @@ Web Server には、Viteで生成した静的ファイルの配信とAPI Server 
 version:5では、Reactを導入して、現代的なフロントエンド構成に
 
 ### 技術選定
-- Frontend
-  - Vercel CDN (Static from Next.js)
-    - Next.js App Router
-      - TSX
-      - TailwindCSS
-      - TypeScript
-- Backend
-  - Vercel Function (AWS Lambda)
-    - API routes (REST API)
-  - PostgreSQL (Docker)
 
+
+|     -    | 使用技術 |
+| -------- | ------- |
+| Frontend | Vercel CDN (Static from Next.js)</br>Next.js App Router<ul><li>TSX</li><li>TailwindCSS</li><li>TypeScript</li></ul> |
+| Backend  | Vercel Function (AWS Lambda)<ul><li>API routes (REST API)</li><li>Prisma</li></ul> PostgreSQL (Docker)              |
 ---
 
 ## version:7 - Next.js(Server Function+Prisma)+PostgreSQL
@@ -121,15 +154,13 @@ RPC（Remote Procedure Call）のように API Routes層を挟まずに、直接
 
 ## version:8 - Next.js+Supabase(PostgreSQL)
 
-最終版として、本番環境へ簡易的に移行するために、PostgreSQLを基盤としたSupabase(Bass)を利用する。
-Pass(Vercel) + Bass(Supabase) の組み合わせによって、サーバーの技術的な詳細に立ち入らず、フロントエンドエンジニアでも本番環境へ介入できる。
-ここでは、Supabaseが提供する REST API をクライアントから直接利用し、Next.jsでのバックエンドロジックを排除する。
+本番環境へ移行するために、PostgreSQLを基盤としたSupabase(Bass)を利用する。Pass(Vercel) + Bass(Supabase) の組み合わせによって、サーバーの技術的な詳細に立ち入らず、フロントエンドエンジニアでも本番環境へ介入できる。
 
-開発環境においてDockerを必ずしも必要としないため、「Todo App」を構築する上で、おそらく最も簡単な方法のひとつである。イメージとしては、SupabaseをMicroCMSに変更すると、現代的なフロントエンド技術を活用したコーポレートサイトが開発できる。
+ここでは、Supabaseが提供する REST API をクライアントから直接利用し、Next.jsでのバックエンドロジックを排除する。開発段階においても、Docker等の仮想環境に依存しないため、「Todo App」を構築するうえで、もっとも簡単な方法のひとつである。
 
-### 技術選定
+### 技術選定 🚀
 
-|          | 使用技術               |
-| -------- | --------------------- |
+| -        | Tech Stack            |
+|:--------:| --------------------- |
 | Frontend | Vercel CDN (Static from Next.js)</br>Next.js App Router<ul><li>TSX</li><li>TailwindCSS</li><li>TypeScript</li></ul> |
 | Backend  | Supabase (PostgreSQL) |
