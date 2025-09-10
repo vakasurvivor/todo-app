@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    width: 100%;
+    min-height: 100dvh;
+    background-color: var(--color-white);
+    color: var(--color-gray-950);
+    font-family: var(--font-inter), var(--font-noto-sans-jp);
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  button {
+    cursor: pointer;
+    background-color: var(--color-gray-100);
+    transition: background-color 0.15s ease;
+  }
+}
+
+@layer utilities {
+  /* animation */
+  .fade-in {
+    animation: fade-in 0.3s ease-out forwards;
+  }
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      translate: 0% 6px;
+    }
+    100% {
+      opacity: 1;
+      translate: 0% 0%;
+    }
+  }
+
+  .fade-out {
+    animation: fade-out 0.3s ease-in forwards;
+  }
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+      translate: 0% 0%;
+    }
+    100% {
+      opacity: 0;
+      translate: 10% 0%;
+    }
+  }
+
+  .fade-up {
+    animation: fade-up 0.3s ease-out forwards;
+  }
+  @keyframes fade-up {
+    0% {
+      translate: 0% 100%;
+    }
+    100% {
+      translate: 0% 0%;
+    }
+  }
+
+  .dialog-fade-in {
+    animation: dialog-fade-in 0.3s ease-out forwards;
+  }
+  @keyframes dialog-fade-in {
+    0% {
+      opacity: 0;
+      scale: 0.95;
+    }
+    100% {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  .dialog-fade-out {
+    animation: dialog-fade-out 0.25s ease forwards;
+  }
+  @keyframes dialog-fade-out {
+    0% {
+      opacity: 1;
+      scale: 1;
+    }
+    100% {
+      opacity: 0;
+      scale: 0.95;
+    }
+  }
+}
