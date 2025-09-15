@@ -3,6 +3,10 @@
     {
       "name": "Installing Dependencies",
       "command": "npm install"
+    },
+    {
+      "name": "Setting up Database",
+      "command": "npx prisma generate && npx prisma migrate deploy"
     }
   ],
 
