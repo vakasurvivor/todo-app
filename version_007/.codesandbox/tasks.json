@@ -22,7 +22,7 @@
       "command": "npm run dev",
       "runAtStart": true,
       "preview": {
-        "port": 8080
+        "port": 3007
       }
     }
   }
