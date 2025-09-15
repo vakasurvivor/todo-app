@@ -1,16 +1,14 @@
-import Main from "@/components/Main";
-import Dialog from "@/components/Dialog";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { DialogProvider } from "./DialogContext";
+import Main from "@/components/main/main";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
 
-export default function Home() {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+export default function Home({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <DialogProvider>
+    <>
       <Header />
-      <Main />
+      <Main searchParams={searchParams} />
       <Footer />
-      <Dialog />
-    </DialogProvider>
+    </>
   );
 }

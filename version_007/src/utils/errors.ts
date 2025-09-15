@@ -1,4 +1,4 @@
-// ./src/utils/errors.js
+// ./src/utils/errors.ts
 
 class AppError extends Error {
   static errorName = "App Error";

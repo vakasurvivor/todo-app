@@ -1,8 +1,10 @@
-import { fetchDeleteTask } from "@/utils/db-feach";
 import { useTasksContext } from "@/components/Main/TasksContext";
+import { actionDeleteTask } from "@/libs/actions";
+import type { Task } from "@/libs/types";
 import Image from "next/image";
+import { useTransition } from "react";
 
-export default function TaskControlBtns({ task }) {
+export default function TaskControlBtns({ task }: { task: Task }) {
   return (
     <div
       className="flex gap-x-2 [&>button]:size-6 [&>button]:p-1 [&>button]:rounded-sm"
@@ -21,18 +23,28 @@ type TaskDeleteBtnProps = {
 };
 function TaskDeleteBtn({ className, id }: TaskDeleteBtnProps) {
   const { setTasks } = useTasksContext();
+  const [isPending, startTransition] = useTransition();
 
   async function handleClick() {
-    const res = window.confirm("削除して宜しいですか？");
-    if (res) {
-      await fetchDeleteTask(id);
+    const ok = window.confirm("削除してよろしいですか？");
+    if (!ok) return;
 
-      setTasks((prev) =>
-        prev.map((task) =>
-          task.id === id ? { ...task, isDeleting: true } : task
-        )
-      );
-    }
+    startTransition(async () => {
+      try {
+        const res = await actionDeleteTask(id);
+        if (!res?.success) return;
+
+        startTransition(() => {
+          setTasks((prev) =>
+            prev.map((task) =>
+              task.id === id ? { ...task, isDeleting: true } : task
+            )
+          );
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    });
   }
 
   return (
@@ -41,6 +53,7 @@ function TaskDeleteBtn({ className, id }: TaskDeleteBtnProps) {
       type="button"
       aria-label="タスクを削除する"
       onClick={handleClick}
+      disabled={isPending}
     >
       <Image src="/img/trash.svg" width="24" height="24" alt="" />
     </button>

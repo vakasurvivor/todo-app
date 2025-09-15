@@ -1,6 +1,7 @@
 {
-  "name": "version_005_a",
-  "version": "0.0.0",
+  "name": "todo_application",
+  "version": "7.0.0",
+  "description": "using Next.js (Server Action), Prisma, and PostgreSQL.",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

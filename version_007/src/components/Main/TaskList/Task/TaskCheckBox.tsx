@@ -1,6 +1,6 @@
-import { fetchUpdateTask } from "@/utils/db-feach";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { cn } from "@/utils/cn";
+import { actionUpdateTask } from "@/libs/actions";
 
 type TaskCheckboxProps = {
   id: number;
@@ -9,18 +9,26 @@ type TaskCheckboxProps = {
 
 export default function TaskCheckbox({ id, isCompleted }: TaskCheckboxProps) {
   const [done, setDone] = useState(isCompleted);
+  const [isPending, startTransition] = useTransition();
 
   async function handleChange() {
-    await fetchUpdateTask(id, { isCompleted: !done });
-    setDone(!done);
+    startTransition(async () => {
+      const res = await actionUpdateTask(id, { isCompleted: !done });
+      if (!res?.success) return;
+
+      startTransition(() => {
+        setDone(!done);
+      });
+    });
   }
 
   return (
     <label
       className={cn(
         "grid w-fit",
+        "[&:has(input:checked)+span]:text-gray-600",
         "[&:has(input:checked)+span]:transition-[text-decoration]",
-        "[&:has(input:checked)+span]:[text-decoration:line-through_1.3px_var(--color-gray-950)]"
+        "[&:has(input:checked)+span]:[text-decoration:line-through_1.3px_var(--color-gray-600)]"
       )}
     >
       <input
@@ -37,6 +45,7 @@ export default function TaskCheckbox({ id, isCompleted }: TaskCheckboxProps) {
         type="checkbox"
         checked={done}
         onChange={handleChange}
+        disabled={isPending}
       />
     </label>
   );

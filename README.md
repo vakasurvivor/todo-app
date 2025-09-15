@@ -1,154 +1,143 @@
-b# はじめに
+# はじめに
 
-Next.js は非常に抽象化されているため、公式ドキュメントをそのまま読み進めても、困惑することが多々ありました。特に、非同期処理を伴う通信処理は、その挙動を把握するために、バックエンドの基礎的な理解が不可欠だと感じました。
+`Next.js`は非常に抽象化されているため、公式ドキュメントをそのまま読み進めても、困惑することが多々ありました。とくに`API Routes`や`Server Function`など、通信処理を伴う非同期処理の挙動を把握するためには、基礎的なサーバーサイドの前提知識が不可欠だと感じました。
 
-そこで、シンプルな「Todo App」を段階的に構築し、バックエンドを含めた開発の全体像を学習しました。version:1〜7 は「技術理解の過程」としての学習記録であり、version:8 は成果物として本番環境にデプロイしています。
-
-
-![HTML](https://img.shields.io/badge/HTML-61DAFB?logo=html5&logoColor=black)
-![CSS](https://img.shields.io/badge/CSS-61DAFB?logo=css&logoColor=black)
-![JavaScript](https://img.shields.io/badge/JavaScript-61DAFB?logo=javascript&logoColor=black)
-
-[![npm version](https://img.shields.io/npm/v/react.svg)](https://www.npmjs.com/package/react)
+そこで`CURD`操作を含むシンプルな「Todo」アプリケーションを牧歌的な技術構成から段階的に作成し、バックエンドを含めた全体像を学習しました。`version_001`〜`007`は「技術理解」としての学習記録であり、`version:_008`は成果物として本番環境（Vercel）にデプロイしています。
 
 ---
-# all version
 
 >[!WARNING]
 version:1〜7は、それぞれ確認用に Codesanbox のURLを添付しています。Dev Container を利用したローカル環境での動作確認はできておりますが、VM Sandbox 上での挙動が不安定な場合がございます。ご了承ください。
 
-## version:1 - Only JavaScript(Array)
+## version_001 - Only JavaScript (Array)
 
-まずは Vanilla JavaScript のみで「Todo App」を作成。一見すると、うまく機能しているように思えるが、ブラウザを再読み込みするとデータが消失してしまう。JavaScriptの配列でデータを保持しているため、永続化することがそもそも不可能である。
+まずは`Vanilla JavaScript`のみで作成。一見すると、うまく機能しているように思えるが、ブラウザを再読み込みするとデータが消失してしまう。配列でデータを保持しているため、揮発性を克服することができない。言語仕様のみでの永続化は、そもそも不可能なことを再確認。
 
-### Codesanbox
-
-[version:1 確認用URL](https://giscus.app)
+> [!NOTE]Codesanbox Preview
+> 確認用URL ➜ [version_001](https://giscus.app)
 
 ### 技術選定
-
-|          |              Tech Stack             |
-| :------: | ----------------------------------- |
-| Frontend | HTML</br>CSS</br>JavaScript (Array) |
-| Backend  | -                                   |
-
-
-<details open>
-<summary>技術選定</summary>
-
-> [!NOTE]
-> Highlights information that users should take into account, even when skimming.
-
-> [!TIP]
-> Optional information to help a user be more successful.
-
-> [!IMPORTANT]
-> Crucial information necessary for users to succeed.
-
-> [!WARNING]
-> Critical content demanding immediate user attention due to potential risks.
-
-> [!CAUTION]
-> Negative potential consequences of an action.
->
-</details>
+|          | Tech Stack                                          |
+| :------: | --------------------------------------------------- |
+| Frontend | HTML</br>CSS</br>JavaScript <ul><li>Array</li></ul> |
+| Backend  | -                                                   |
 
 ---
 
-## version:2 - IndexedDB(WebAPI)
+## version_002 - IndexedDB (Web API)
 
-version:1 の課題を踏まえ、ブラウザ内にデータを永続化するため IndexedDB を利用しました。
-ただし、別のブラウザや端末ではデータが同期されないため、依然として実用性には制限があります。異なる環境からでも同一のデータソースに接続したい。
+`version_001`の課題を踏まえ、ブラウザ内にデータを永続化するため`IndexedDB (Web API)`を選択。ブラウザを再読み込みしても、データが揮発せず、うまく機能しているように思える。しかし、別のブラウザや端末ではデータが同期されないため、依然として実用性には難がある。異なる環境からでも同一データソースへの接続を実現するべきである。
 
-### Previw URL (Codesanbox)
-
+> [!NOTE]Codesanbox Preview
+> 確認用URL ➜ [version_002](https://giscus.app)
 
 ### 技術選定
-|          | Tech Stack                          |
-| :------: | ----------------------------------- |
-| Frontend | HTML</br>CSS</br>JavaScript</br>IndexedDB(WebAPI) |
-| Backend  | -                                   |
+|          | Tech Stack                                                      |
+| :------: | --------------------------------------------------------------- |
+| Frontend | HTML</br>CSS</br>JavaScript<ul><li>IndexedDB (WebAPI)</li></ul> |
+| Backend  | -                                                               |
 
 ---
 
-## version:3 - Node.js(Express)+SQLite
+## version_003 - Node.js (Express/SQLite)
 
-version:2 の課題を踏まえ、ブラウザの外部に記憶領域を置く。実用的な「Todo App」にはバックエンドが必須である。手始めに、Node.js(Express)とSQLiteを組み合わて、REST API を構築する。これにより、異なる環境からでも同一のデータソースに接続でき、基本的なCRUD操作をクライアントから通信越しに行うことができる。
+`version_002`の課題を踏まえると、ブラウザの外部に独立した記憶領域を置く必要がある。つまり、実用的なアプリケーションにはバックエンドが不可欠である。まずは、`Node.js(Express)`と`SQLite`を組み合わて、`REST API`サーバーを構築する。これにより、異なる環境からでも同一のデータソースに接続でき、永続化が保証された状態で、クライアントから通信越しに`CRUD`操作を行うことができる。
+
+> [!NOTE]Codesanbox Preview
+> 確認用URL ➜ [version_003](https://giscus.app)
 
 ### 技術選定
-- Frontend (Express Static + Vite): HTML, CSS, JavaScript
-- Backend: Node.js, Express, Prisma, SQLite
+
+|          | Tech Stack                                      |
+| :------: | ----------------------------------------------- |
+| Frontend | HTML</br>CSS</br>JavaScript                     |
+| Backend  | Node.js<ul><li>Express</li><li>SQLite</li></ul> |
 
 ---
 
-## version:4 - Node.js(Express+Prisma)+Vite+SQLite
+## version:4 - Node.js (Express/Vite/Prisma/SQLite)
 
-version:3 によって機能要件は満たされている。ここからは、段階的に改良を重ねて、現代的なフロントエンドを主軸としたフルスタック構成に近づけていく。まずは、フロントエンドの分散化されたモジュールを、Viteでバンドルし、パフォーマンスの改善を図る。バックエンドでは、Prisma(ORM)を導入して、Database層の抽象化を図る。
+`version_003`によって、データの永続化という絶対条件は満たされている。ここからは、段階的に改良を重ねて、現代的なフロントエンドを主軸としたフルスタック構成に近づけていく。まずは、フロントエンドの分散化されたモジュールを、Viteでバンドルし、パフォーマンスの改善を図る。バックエンドでは、Prisma(ORM)を導入して、Database層の抽象化を図る。
+
+> [!NOTE]Codesanbox Preview
+> 確認用URL ➜ [version_004](https://giscus.app)
 
 ### 技術選定
-- Frontend (Express Static)
-  - Vite(dist)
-    - HTML
-    - CSS
-    - JavaScript
-- Backend
-  - Node.js
-    - Express
-    - Prisma
-    - SQLite
+|          | Tech Stack                                                     |
+| :------: | -------------------------------------------------------------- |
+| Frontend | HTML</br>CSS</br>JavaScript                                    |
+| Backend  | Node.js<ul><li>Express</li><li>Prisma</li><li>SQLite</li></ul> |
 
 ---
 
-## version:5 - NGNIX(Vite:React)+Node.js(Express+Prisma)+PostgreSQL
+## version:5 - nginx (Vite/React) + Node.js (Express/Prisma) + PostgreSQL
 
-version:3β の構成では、Node.jsに責務が集中している。「Todo App」は小規模なため、問題は表面化しないが、プログラミングの定石としては「単一責任」の法則がある。肥大化した責務を分割し、三層構造を構築する。
+`version_004`の構成では、`Node.js`に責務が集中している。ここでは、肥大化した`Node.js`の責務を分割し、サーバーサイドを以下のような三層構造に移行する。
 
-- Web Server (nginx)
-- API Server (Node.js)
-- Database Server (PostgreSQL)
+`Web Server`には、`Vite`で生成した静的ファイルの配信と`API Server`へのプロキシを委任する。`Database Server`の独立に伴い、ファイルベースの`SQLite`からより汎用的な`PostgreSQL`へ移行する。分散化されたバックエンドの開発環境として`Docker`を導入する。
 
-Web Server には、Viteで生成した静的ファイルの配信とAPI Server への振り分けを委任する。Database Serverの独立に伴い、ファイルベースのSQLiteからより汎用的なPostgreSQLへ移行する。分散化されたバックエンドの開発環境としてDockerを導入する。更なる改良として、フロントエンドは、より宣言的にUI構築をするためにReactを利用する。すでに導入済みのVite を基盤として React + CSS Modules で全体的に書き換える。SPA (Single Page Application)への転換を図り、モダンなフロントエンドエコシステムとの接点を持たせる。
+|   Server Type   | Tech Stack               |
+| :-------------: | ------------------------ |
+|   Web Server    | nginx (Vite/React)       |
+|   API Server    | Node.js (Express/Prisma) |
+| Database Server | PostgreSQL               |
+
+
+
+フロントエンドは、より宣言的に記述するために`React`を利用する。すでに導入済みの`Vite`を基盤として`JSX` + `CSS Modules`で全体的に書き換える。`SPA (Single Page Application)`への転換を図り、モダンなフロントエンドエコシステムとの接点を持たせる。
+
+> [!NOTE]Codesanbox Preview
+> 確認用URL ➜ [version_005](https://giscus.app)
 
 ### 技術選定
-- Frontend
-  - NGINX (Docker)
-    - Vite × React SPA(dist)
-      - JSX
-      - CSS Modules
-      - Javacript
-- Backend
-  - Node.js (Docker)
-    - Express
-    - Prisma
-  - PostgreSQL (Docker)
+
+|          | 使用技術                                                                                                                          |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Frontend | <ul><li>JSX</li><li>CSS Modules</li><li>Javacript</li></ul>                                                                       |
+| Backend  | nginx (Docker)<ul><li>Vite × React SPA(dist)</li></ul>Node.js (Docker)<ul><li>Express</li><li>Prisma</li></ul> PostgreSQL(Docker) |
 
 ---
 
-## version:6 - Next.js(API Routes+Prisma)+PostgreSQL
+## version:6 - Next.js (API Routes/Prisma) + PostgreSQL
 
-version:5では、Reactを導入して、現代的なフロントエンド構成に
+`version_005`では、フロントエンドは`Vite`を基盤とした`React`の導入によって`SPA`に移行した。`version_005`構成では、原則的に`CSR(Client Side Rendering)`になる。`CSR`の代表的な短所として、toCを考慮する場合に、初期表示の遅延やSEOなどの懸念点が挙げられる。
+
+そうした課題を克服するために`SSR(Server Side Rendering)`が存在する。`SSR`を実現するために、`React`に準拠したフルスタックフレームワークが必要である。ここでは`Next.js(App Router)`を利用する。`Vercel`にデプロイすることを前提とすると、`Web Server`と`API Server`を統合できる。
+
+`express`で実現していた`REST API`を、`API Routes`として書き換える。`JavaScript`から`TypeScript`に,`CSS Module`から`Tailwind CSS`に書き換える。
+
+
+ハイブリッド構成で、フロントエンドとバックエンドの境界が曖昧になる。
+
+> [!NOTE]Codesanbox Preview
+> 確認用URL ➜ [version_006](https://giscus.app)
 
 ### 技術選定
 
 
-|     -    | 使用技術 |
-| -------- | ------- |
+| -        | 使用技術                                                                                                            |
+| -------- | ------------------------------------------------------------------------------------------------------------------- |
 | Frontend | Vercel CDN (Static from Next.js)</br>Next.js App Router<ul><li>TSX</li><li>TailwindCSS</li><li>TypeScript</li></ul> |
-| Backend  | Vercel Function (AWS Lambda)<ul><li>API routes (REST API)</li><li>Prisma</li></ul> PostgreSQL (Docker)              |
+| Backend  | Vercel Function (AWS Lambda)<ul><li>API routes (REST API)</li><li>Prisma</li></ul> PostgreSQL(Docker)               |
 ---
 
 ## version:7 - Next.js(Server Function+Prisma)+PostgreSQL
 
-version:6では、Expressで構築した REST API を、Next.js が提供する API Routes に移行した。
+`version_006`では、Expressで構築した REST API を、Next.js が提供する API Routes に移行した。
 
-RPC（Remote Procedure Call）のように API Routes層を挟まずに、直接サーバー関数を
+`Server Function`
+
+`RPC（Remote Procedure Call)`のように`API Routes`を挟まずに、直接サーバー関数を
+
+> [!NOTE]Codesanbox Preview
+> 確認用URL ➜ [version_007](https://giscus.app)
 
 ### 技術選定
 
-|          | 使用技術               |
-| -------- | --------------------- |
+|          | 使用技術                                                                                                            |
+| -------- | ------------------------------------------------------------------------------------------------------------------- |
 | Frontend | Vercel CDN (Static from Next.js)</br>Next.js App Router<ul><li>TSX</li><li>TailwindCSS</li><li>TypeScript</li></ul> |
-| Backend  | Vercel Function (AWS Lambda)<ul><li>Server Function (RPC)</li><li>Prisma</li></ul> PostgreSQL (Docker) |
+| Backend  | Vercel Function (AWS Lambda)<ul><li>Server Function (RPC)</li><li>Prisma</li></ul> PostgreSQL (Docker)              |
 
 ---
 
@@ -158,9 +147,12 @@ RPC（Remote Procedure Call）のように API Routes層を挟まずに、直接
 
 ここでは、Supabaseが提供する REST API をクライアントから直接利用し、Next.jsでのバックエンドロジックを排除する。開発段階においても、Docker等の仮想環境に依存しないため、「Todo App」を構築するうえで、もっとも簡単な方法のひとつである。
 
-### 技術選定 🚀
+> [!NOTE]Codesanbox Preview
+> 確認用URL ➜ [version_008](https://giscus.app)
 
-| -        | Tech Stack            |
-|:--------:| --------------------- |
-| Frontend | Vercel CDN (Static from Next.js)</br>Next.js App Router<ul><li>TSX</li><li>TailwindCSS</li><li>TypeScript</li></ul> |
-| Backend  | Supabase (PostgreSQL) |
+### 技術選定
+
+|    -     | Tech Stack                                                                          |
+| :------: | ----------------------------------------------------------------------------------- |
+| Frontend | Next.js App Router<ul><li>TSX</li><li>TailwindCSS</li><li>TypeScript</li></ul>      |
+| Backend  | Vercel CDN (Static from Next.js)</br>Server Function(RPC)</br>Supabase (PostgreSQL) |

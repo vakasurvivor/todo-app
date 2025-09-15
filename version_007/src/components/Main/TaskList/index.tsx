@@ -2,13 +2,12 @@
 
 import Task from "./Task";
 import { useTasksContext } from "../TasksContext";
+import { cn } from "@/utils/cn";
 
-export default function TaskList() {
+export default function TaskList({ className }: { className?: string }) {
   const { tasks } = useTasksContext();
-
-  console.log(tasks);
   return (
-    <ul aria-busy="true" className="w-full">
+    <ul aria-busy="true" className={cn("w-full", className)}>
       {tasks.map((task) => {
         return <Task key={task.id} task={task} />;
       })}

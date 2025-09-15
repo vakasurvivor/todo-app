@@ -1,26 +1,25 @@
 {
-  "name": "Todo App : Next.js & PostgreSQL",
+  "name": "Todo App : Next.js & Supabase",
   "dockerComposeFile": "compose.yaml",
   "service": "app",
   "workspaceFolder": "/workspaces",
   "features": {
     "ghcr.io/codesandbox/devcontainer-features/codesandbox:0.1.4": {}
   },
-  "forwardPorts": [3005, "db:5432"],
+  "forwardPorts": [3008],
 
   "customizations": {
     "vscode": {
       "extensions": [
-        // TailwindCSS
-        "bradlc.vscode-tailwindcss",
-        // Prisma
-        "Prisma.prisma",
-        // Formatter / Linter
-        "esbenp.prettier-vscode",
-        "ms-vscode.vscode-eslint"
+        "esbenp.prettier-vscode", // Prettier
+        "ms-vscode.vscode-eslint", // ESLint
+        "bradlc.vscode-tailwindcss" // Tailwind CSS
       ],
       "settings": {
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "files.associations": {
+          "*.css": "tailwindcss"
+        }
       }
     }
   }

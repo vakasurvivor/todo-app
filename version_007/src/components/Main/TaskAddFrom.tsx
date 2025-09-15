@@ -1,56 +1,56 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { actionAddTask } from "@/libs/actions";
+import { useActionState, useEffect } from "react";
 import { useTasksContext } from "@/components/Main/TasksContext";
-import { fetchAddTask, fetchGetTask } from "@/utils/db-feach";
 import { cn } from "@/utils/cn";
 import Image from "next/image";
 
 export default function TaskAddFrom() {
   const { setTasks } = useTasksContext();
-  const [inputText, setInputText] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [result, formAction, isPending] = useActionState(actionAddTask, null);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  useEffect(() => {
+    if (!result?.success || !("data" in result)) return;
 
-    if (!inputText) {
-      inputRef.current?.focus();
-      return;
-    }
-
-    const { id } = await fetchAddTask(inputText);
-    const res = await fetchGetTask(id);
-
-    const newTask = {
-      ...res,
+    const addTask = {
+      ...result.data,
       isAdding: true,
       isEditing: false,
       isDeleting: false,
       isMovingUp: false,
     };
 
-    if (res) {
-      setInputText("");
-      setTasks((prev) => [...prev, newTask]);
-    }
-  }
+    setTasks((prev) => [...prev, addTask]);
+  }, [result, setTasks]);
 
   return (
-    <form className={cn("relative w-full mb-8")} onSubmit={handleSubmit}>
+    <form
+      className={cn("relative w-full")}
+      action={formAction}
+      onSubmit={(e) => {
+        const inputEl = e.currentTarget.elements.namedItem(
+          "text"
+        ) as HTMLInputElement;
+
+        if (!inputEl.value.trim()) {
+          e.preventDefault();
+          inputEl.focus();
+          return;
+        }
+      }}
+    >
       <input
-        ref={inputRef}
         className={cn(
           "w-full p-2 bg-white rounded-sm",
           "border border-black/10 outline-2 outline-transparent transition-[border,_outline]",
           "focus:outline-black/20 focus:border-transparent"
         )}
-        id="task-input"
         maxLength={50}
-        placeholder="🚀 新しいタスクを追加する"
+        placeholder="🚀 New Task"
+        name="text"
         type="text"
-        value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
+        disabled={isPending}
       />
       <button
         className={

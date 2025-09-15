@@ -1,19 +1,7 @@
 "use client";
 
-import { fetchGetAllTasks } from "@/utils/db-feach";
-import { createContext, useContext, useEffect, useState } from "react";
-
-type Task = {
-  id: number;
-  text: string;
-  createdAt: string;
-  updatedAt: string | null;
-  isCompleted: boolean;
-  isAdding: boolean;
-  isEditing: boolean;
-  isDeleting: boolean;
-  isMovingUp: boolean;
-};
+import type { initialTask, Task } from "@/libs/types";
+import { createContext, useContext, useState } from "react";
 
 type TasksContextType = {
   tasks: Task[];
@@ -33,27 +21,20 @@ export function useTasksContext() {
 }
 
 type TasksProviderProps = {
+  initialTasks: initialTask[];
   children: React.ReactNode;
 };
 
-export function TasksProvider({ children }: TasksProviderProps) {
-  const [tasks, setTasks] = useState<Task[]>([]);
-
-  useEffect(() => {
-    async function getTasks() {
-      const res = await fetchGetAllTasks();
-      console.log(res);
-      const tasks = res.map((t: any) => ({
-        ...t,
-        isAdding: false,
-        isEditing: false,
-        isDeleting: false,
-        isMovingUp: false,
-      }));
-      setTasks(tasks);
-    }
-    getTasks();
-  }, []);
+export function TasksProvider({ initialTasks, children }: TasksProviderProps) {
+  const [tasks, setTasks] = useState<Task[]>(
+    initialTasks.map((initialTask) => ({
+      ...initialTask,
+      isAdding: false,
+      isEditing: false,
+      isDeleting: false,
+      isMovingUp: false,
+    }))
+  );
 
   return (
     <TasksContext

@@ -1,7 +1,7 @@
 {
-  "name": "frontend",
-  "version": "1.0.0",
-  "description": "A simple CRUD Todo application built with Vite, React, and Express.",
+  "name": "todo_application",
+  "version": "5.0.0",
+  "description": "using nignx, Vite, and React.",
   "private": true,
   "type": "module",
   "workspaces": [

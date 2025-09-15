@@ -28,7 +28,6 @@ export async function actionAddTask(
     const newTask = await addTask(text);
     return { success: true, data: newTask };
   } catch (err) {
-    console.error(err);
     return actionHandleError(err);
   }
 }
@@ -54,7 +53,6 @@ export async function actionUpdateTask(
     const success = await updateTask(parsedId, parsedUpdates);
     return { success };
   } catch (err) {
-    console.error(err);
     return actionHandleError(err);
   }
 }
@@ -69,7 +67,6 @@ export async function actionDeleteTask(id: number): Promise<ActionResult> {
     const success = await deleteTask(result.id);
     return { success };
   } catch (err) {
-    console.error(err);
     return actionHandleError(err);
   }
 }

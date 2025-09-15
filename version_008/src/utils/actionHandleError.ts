@@ -20,7 +20,7 @@ export default function actionHandleError(err: unknown) {
     success: false,
     error: {
       name: "Unexpected Error",
-      message: "サーバーで予期しない例外が発生しました",
+      message: "サーバーで予期しない例外が発生しました。",
     },
   };
 }

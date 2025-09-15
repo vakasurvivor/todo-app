@@ -6,7 +6,7 @@
   "features": {
     "ghcr.io/codesandbox/devcontainer-features/codesandbox:0.1.4": {}
   },
-  "forwardPorts": [3005, "db:5432"],
+  "forwardPorts": [3007, "db:5432"],
 
   "customizations": {
     "vscode": {

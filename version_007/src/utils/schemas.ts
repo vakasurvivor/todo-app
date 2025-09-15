@@ -1,8 +1,8 @@
-// ./src/utils/schemas.js
+// ./src/utils/schemas.ts
 
 import { z } from "zod";
 
-export const idSchema = z.object({
+export const taskSchema = z.object({
   id: z.coerce
     .number({
       error: "数値を指定してください。",
@@ -13,9 +13,7 @@ export const idSchema = z.object({
     .positive({
       error: "正の整数を指定してください。",
     }),
-});
 
-export const taskSchema = z.object({
   text: z
     .string({
       error: (iss) => `${iss.expected} 型で指定してください。`,

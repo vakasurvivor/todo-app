@@ -1,7 +1,7 @@
 import app from "./src/app.js";
 import { initDB } from "./src/model/taskModel.js";
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 
 async function startServer() {
   try {

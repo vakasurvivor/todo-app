@@ -1,7 +1,7 @@
 {
-  "name": "todo-app-api",
+  "name": "todo_application_api",
   "version": "4.0.0",
-  "description": "A simple REST API for a Todo application, using Express, Prisma, and PostgreSQL.",
+  "description": "using nignx, Express, Prisma, and PostgreSQL.",
   "main": "server.js",
   "type": "module",
   "engines": {

@@ -1,49 +1,61 @@
 // src/lib/tasks.ts
 
-import prisma from "./prisma";
+import { createClient } from "@/utils/supabase/client";
+import { toCamelCaseKeys } from "es-toolkit";
+import { PostgrestError } from "@supabase/supabase-js";
 import { DatabaseError } from "@/utils/errors";
+
+const supabase = createClient();
 
 export async function getAllTasks() {
   try {
-    const tasks = await prisma.task.findMany({
-      orderBy: { id: "asc" },
-    });
+    const { data, error } = await supabase
+      .from("tasks")
+      .select()
+      .order("id", { ascending: true });
 
-    return tasks.map((t) => ({
-      ...t,
-      createdAt: t.createdAt.toISOString(),
-      updatedAt: t.updatedAt ? t.updatedAt.toISOString() : null,
-    }));
-  } catch (err) {
-    if (isPrismaError(err)) {
+    if (error) {
+      console.error("Supabase API:", error);
+      throw error;
+    }
+
+    return toCamelCaseKeys(data);
+  } catch (e) {
+    if (e instanceof PostgrestError) {
       throw new DatabaseError("タスクの全件取得に失敗しました。", {
-        cause: err,
+        cause: e,
       });
     }
+
     throw new DatabaseError("データベースの操作中に例外が発生しました。", {
-      cause: err,
+      cause: e,
     });
   }
 }
 
 export async function addTask(text: string) {
   try {
-    const newTask = await prisma.task.create({
-      data: { text },
-    });
-    return {
-      ...newTask,
-      createdAt: newTask.createdAt.toISOString(),
-      updatedAt: newTask.updatedAt ? newTask.updatedAt.toISOString() : null,
-    };
-  } catch (err) {
-    if (isPrismaError(err)) {
-      throw new DatabaseError("タスクの新規作成に失敗しました。", {
-        cause: err,
+    const { data, error } = await supabase
+      .from("tasks")
+      .insert([{ text: text }])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase API:", error);
+      throw error;
+    }
+
+    return toCamelCaseKeys(data);
+  } catch (e) {
+    if (e instanceof PostgrestError) {
+      throw new DatabaseError("タスクの追加に失敗しました。", {
+        cause: e,
       });
     }
+
     throw new DatabaseError("データベースの操作中に例外が発生しました。", {
-      cause: err,
+      cause: e,
     });
   }
 }
@@ -53,46 +65,68 @@ export async function updateTask(
   updates: { text?: string; isCompleted?: boolean }
 ) {
   try {
-    const result = await prisma.task.update({
-      where: { id },
-      data: {
-        ...updates,
-        updatedAt: new Date(),
-      },
-    });
-    return Boolean(result);
-  } catch (err) {
-    if (isPrismaError(err)) {
-      throw new DatabaseError("タスクの更新に失敗しました。", {
-        cause: err,
+    const { text, isCompleted } = updates;
+
+    const { data, error } = await supabase
+      .from("tasks")
+      .update({
+        ...(text !== undefined && { text }),
+        ...(isCompleted !== undefined && { is_completed: isCompleted }),
+        updated_at: new Date(),
+      })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase API:", error);
+      throw error;
+    }
+
+    return Boolean(data);
+  } catch (e) {
+    if (isPostgrestError(e)) {
+      throw new DatabaseError("変更に失敗しました。", {
+        cause: e,
       });
     }
+
     throw new DatabaseError("データベースの操作中に例外が発生しました。", {
-      cause: err,
+      cause: e,
     });
   }
 }
 
 export async function deleteTask(id: number) {
   try {
-    const result = await prisma.task.delete({ where: { id } });
-    return Boolean(result);
-  } catch (err) {
-    if (isPrismaError(err)) {
-      throw new DatabaseError("タスクの削除に失敗しました。", {
-        cause: err,
+    const { data, error } = await supabase
+      .from("tasks")
+      .delete()
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase API:", error);
+      throw error;
+    }
+
+    return Boolean(data);
+  } catch (e) {
+    if (isPostgrestError(e)) {
+      throw new DatabaseError("削除に失敗しました。", {
+        cause: e,
       });
     }
+
     throw new DatabaseError("データベースの操作中に例外が発生しました。", {
-      cause: err,
+      cause: e,
     });
   }
 }
 
-function isPrismaError(err: unknown) {
+function isPostgrestError(err: unknown): err is PostgrestError {
   return (
-    err instanceof Error &&
-    typeof err.name === "string" &&
-    err.name.startsWith("PrismaClient")
+    typeof err === "object" && err !== null && "message" in err && "code" in err
   );
 }

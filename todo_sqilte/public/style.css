@@ -1,7 +1,0 @@
-@layer reset, theme, base, components,utilities;
-
-@import url("./styles/reset.css") layer(reset);
-@import url("./styles/theme.css") layer(theme);
-@import url("./styles/base.css") layer(base);
-@import url("./styles/components.css") layer(components);
-@import url("./styles/utilities.css") layer(utilities);

@@ -1,7 +1,7 @@
 {
-  "name": "todo-app",
+  "name": "todo_application",
   "version": "3.0.0",
-  "description": "",
+  "description": "A simple REST API for a Todo application, using Express, SQLite.",
   "main": "server.js",
   "type": "module",
   "engines": {

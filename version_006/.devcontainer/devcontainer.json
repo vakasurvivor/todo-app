@@ -1,0 +1,27 @@
+{
+  "name": "Todo App : Next.js & PostgreSQL",
+  "dockerComposeFile": "compose.yaml",
+  "service": "app",
+  "workspaceFolder": "/workspaces",
+  "features": {
+    "ghcr.io/codesandbox/devcontainer-features/codesandbox:0.1.4": {}
+  },
+  "forwardPorts": [3006, "db:5432"],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // TailwindCSS
+        "bradlc.vscode-tailwindcss",
+        // Prisma
+        "Prisma.prisma",
+        // Formatter / Linter
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-eslint"
+      ],
+      "settings": {
+        "editor.formatOnSave": true
+      }
+    }
+  }
+}

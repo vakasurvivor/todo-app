@@ -7,7 +7,6 @@ export type Task = {
   isAdding: boolean;
   isEditing: boolean;
   isDeleting: boolean;
-  isMovingUp: boolean;
 };
 
 export type initialTask = {

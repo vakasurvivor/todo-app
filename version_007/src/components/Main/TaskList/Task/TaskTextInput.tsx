@@ -1,7 +1,7 @@
-import { fetchUpdateTask } from "@/utils/db-feach";
 import { useState, useEffect, useRef } from "react";
 import { useTasksContext } from "@/components/Main/TasksContext";
 import { cn } from "@/utils/cn";
+import { actionUpdateTask } from "@/libs/actions";
 
 type TaskTextInputProps = {
   id: number;
@@ -28,7 +28,7 @@ export default function TaskTextInput({
   async function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       if (editedText && editedText !== originalText) {
-        await fetchUpdateTask(id, { text: editedText });
+        await actionUpdateTask(id, { text: editedText });
 
         savedRef.current = true;
         (e.target as HTMLInputElement).blur();
@@ -90,7 +90,7 @@ export default function TaskTextInput({
           onBlur={handleBlur}
         />
       ) : (
-        <span className="grow p-2">{editedText}</span>
+        <span className="grow p-2 break-all">{editedText}</span>
       )}
     </>
   );

@@ -3,8 +3,9 @@ import TaskCheckbox from "./TaskCheckBox";
 import TaskTextInput from "./TaskTextInput";
 import TaskControlBtns from "./TaskControlBtns";
 import { useTasksContext } from "@/components/Main/TasksContext";
+import type { Task } from "@/libs/types";
 
-export default function Task({ task }) {
+export default function Task({ task }: { task: Task }) {
   const { tasks, setTasks } = useTasksContext();
 
   const handleAnimationEnd = () => {
@@ -36,7 +37,7 @@ export default function Task({ task }) {
     <li
       data-task-item-id={task.id}
       className={clsx(
-        "flex items-center justify-between gap-x-2 bg-white mb-4 py-2 border-b border-black/10",
+        "flex items-center justify-between gap-x-2  mb-4 py-2 border-b border-black/10",
         task.isAdding && "fade-in",
         task.isDeleting && "fade-out",
         task.isMovingUp && "fade-up"
